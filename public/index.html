@@ -1,0 +1,54 @@
+<html>
+    <head> 
+        <title>HTTP Methods</title>
+    </head>
+    <body>
+        
+        <form id = "form" style="align-items: center;"> 
+            <label for="name">NAME</label>
+            <input id = "name" type="text" name = "name"><br/>
+            <label for="age">AGE</label>
+            <input id="age" type="text" name="age"><br/>
+            <label for="address">ADDRESS</label>
+            <textarea id = "address" rows="5" cols="45"></textarea><br/>
+            <input type="submit" name="submit">
+            <br />
+
+        </form>
+
+        <button id = "getBtn" onclick="get()">GET</button>
+        <p id="get"></p>
+
+                <script>
+                document.getElementById("form").addEventListener("submit", async(e) => {
+                    e.preventDefault();
+                    const data = {
+                        name : document.getElementById("name").value,
+                        age : document.getElementById("age").value,
+                        address : document.getElementById("address").value
+                    };
+                    const res = await fetch("/data", {
+                        method : "POST",
+                        headers : {"Content-Type" : "application/json"},
+                        body : JSON.stringify(data)
+                    });
+                    const result = await res.json();
+                    document.getElementById("form").reset();
+                    console.log(result);
+                });
+
+            async function get() {
+                document.getElementById("get").innerText = "";
+                const res = await fetch('/data');
+                const data = await res.json();
+                let n = data.length;
+                for (let i = 0; i < n; ++i) {
+                    let str = "Name: " + data[i].name + ", AGE: " + data[i].age + ", ADDRESS: " + data[i].address;
+                    document.getElementById("get").innerText += str + "\n";
+                }
+
+            }
+        </script>
+    
+    </body>
+</html> 

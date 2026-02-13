@@ -5,48 +5,89 @@
     <body>
         
         <form id = "form" style="align-items: center;"> 
-            <label for="name">NAME</label>
-            <input id = "name" type="text" name = "name"><br/>
-            <label for="age">AGE</label>
-            <input id="age" type="text" name="age"><br/>
-            <label for="address">ADDRESS</label>
-            <textarea id = "address" rows="5" cols="45"></textarea><br/>
-            <input type="submit" name="submit">
-            <br />
-
+            <table border="6px">
+                <tr>
+                <td><label for="name">NAME</label></td>
+                <td><input id = "name" type="text" name = "name"><br/></td>
+                </tr>
+                <tr>
+                <td><label for="age">AGE</label></td>
+                <td><input id="age" type="text" name="age"><br/></td>
+                </tr>
+                <tr>
+                <td><label for="address">ADDRESS</label></td>
+                <td><textarea id = "address" rows="5" cols="45"></textarea><br/></td>
+                </tr>
+                <tr><td colspan = '2'>
+                    <input type="submit" name="submit">
+                    <button type="button" id = "getBtn" onclick="getMethod()">GET</button>
+                    <button type="button" id = "putBtn" onclick="putMethod()">PUT</button>
+                    <button type="button" id = "delBtn" onclick="deleteMethod()">DELETE</button>
+                </td></tr>
+                <br/>
+            </table>
         </form>
+        
+        <p id="getDetails"></p>
+        <br/>
 
-        <button id = "getBtn" onclick="get()">GET</button>
-        <p id="get"></p>
-
-                <script>
-                document.getElementById("form").addEventListener("submit", async(e) => {
-                    e.preventDefault();
-                    const data = {
-                        name : document.getElementById("name").value,
-                        age : document.getElementById("age").value,
-                        address : document.getElementById("address").value
-                    };
-                    const res = await fetch("/data", {
-                        method : "POST",
-                        headers : {"Content-Type" : "application/json"},
-                        body : JSON.stringify(data)
-                    });
-                    const result = await res.json();
-                    document.getElementById("form").reset();
-                    console.log(result);
+        <script>
+            document.getElementById("form").addEventListener("submit", async(e) => {
+                e.preventDefault();
+                const data = {
+                    name : document.getElementById("name").value,
+                    age : document.getElementById("age").value,
+                    address : document.getElementById("address").value
+                };
+                const res = await fetch("/data", {
+                    method : "POST",
+                    headers : {"Content-Type" : "application/json"},
+                    body : JSON.stringify(data)
                 });
+                const result = await res.json();
+                document.getElementById("form").reset();
+                console.log(result);
+            });
 
-            async function get() {
-                document.getElementById("get").innerText = "";
+            async function getMethod() {
+                document.getElementById("getDetails").innerText = "";
                 const res = await fetch('/data');
                 const data = await res.json();
                 let n = data.length;
                 for (let i = 0; i < n; ++i) {
                     let str = "Name: " + data[i].name + ", AGE: " + data[i].age + ", ADDRESS: " + data[i].address;
-                    document.getElementById("get").innerText += str + "\n";
+                    document.getElementById("getDetails").innerText += str + "\n";
                 }
+            }
 
+            async function putMethod() {
+                const data = {
+                    name : document.getElementById("name").value,
+                    age : document.getElementById("age").value,
+                    address : document.getElementById("address").value
+                };
+                const res = await fetch("/data", {
+                    method : "PUT",
+                    headers : {"Content-Type" : "application/json"},
+                    body : JSON.stringify(data)
+                });
+                const result = await res.json();
+                document.getElementById("form").reset();
+                console.log(result);
+            };
+
+            async function deleteMethod() {
+                const data = {
+                    name : document.getElementById("name").value,
+                }
+                const res = await fetch('/data', {
+                    method : "DELETE",
+                    headers : {"Content-Type" : "application/json"},
+                    body : JSON.stringify(data),
+                });
+                const result = await res.json();
+                document.getElementById("form").reset();
+                console.log(result);
             }
         </script>
     

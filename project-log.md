@@ -1,4 +1,4 @@
-## 1. Minimal Implementation of HTTP Methods
+## Phase 1. Minimal Implementation of HTTP Methods
 
 - Overview: 
 Implemented a basic fullstack setup to understand core HTTP methods and the request–response lifecycle using Express and vanilla JavaScript.

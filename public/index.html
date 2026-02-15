@@ -39,7 +39,7 @@
                     age : document.getElementById("age").value,
                     address : document.getElementById("address").value
                 };
-                const res = await fetch("/data", {
+                const res = await fetch("/user", {
                     method : "POST",
                     headers : {"Content-Type" : "application/json"},
                     body : JSON.stringify(data)
@@ -51,11 +51,15 @@
 
             async function getMethod() {
                 document.getElementById("getDetails").innerText = "";
-                const res = await fetch('/data');
+                const res = await fetch('/user');
                 const data = await res.json();
+                if (data.length === 0) {
+                    document.getElementById("getDetails").innerText = "No Records";
+                    return;
+                }
                 let n = data.length;
                 for (let i = 0; i < n; ++i) {
-                    let str = "Name: " + data[i].name + ", AGE: " + data[i].age + ", ADDRESS: " + data[i].address;
+                    let str = "NAME: " + data[i].name + ", AGE: " + data[i].age + ", ADDRESS: " + data[i].address;
                     document.getElementById("getDetails").innerText += str + "\n";
                 }
             }
@@ -66,7 +70,7 @@
                     age : document.getElementById("age").value,
                     address : document.getElementById("address").value
                 };
-                const res = await fetch("/data", {
+                const res = await fetch("/user", {
                     method : "PUT",
                     headers : {"Content-Type" : "application/json"},
                     body : JSON.stringify(data)
@@ -80,7 +84,7 @@
                 const data = {
                     name : document.getElementById("name").value,
                 }
-                const res = await fetch('/data', {
+                const res = await fetch('/user', {
                     method : "DELETE",
                     headers : {"Content-Type" : "application/json"},
                     body : JSON.stringify(data),

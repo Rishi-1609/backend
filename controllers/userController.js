@@ -4,38 +4,72 @@ module.exports = {
     get: async (req, res) => {
         const users = await userServices.getAll();
         if (!users) {
-            res.json([]);
-            return;
+            return res.json([]);
         }
-        res.send(users);
         console.log(users); 
+        return res.send(users);
+    },
+
+    getUser : async(req, res) => {
+        try {
+            const id = parseInt(req.params.userId);
+            if (isNaN(id) || !isFinite(id)) {
+                return res.status(400).json({message : "Invalid user ID"});
+            }
+            let user = await userServices.getById(id);
+            if (user) {
+                console.log(user);
+                return res.json(user);
+            }
+            return res.status(404).json({message : "User not found"});
+        }
+        catch (err) {
+            console.log("Error in getUser: ", err);
+            return res.status(500).json({message : "Internal server error"});
+        }
     },
 
     post: async (req, res) => {
         const success = await userServices.addUser(req.body);
         if (success) {
-            res.status(201).json("User created");
-            return;
+            return res.status(201).json("User created");
         }
         res.status(400).json("Invalid details submitted");
     },
 
     put : async (req, res) => {
-        const obj = req.body;
-        if (obj.name) {
-            for (const person of arr) {
-                if (person.name === obj.name) {
-                    person.name = obj.name;
-                    person.age = obj.age || person.age;
-                    person.address = obj.address || person.address;
-                    res.status(200).json({message: `Data updated successfully for ${person.name}`})
-                    break;
-                }
+        try {
+            const id = parseInt(req.params.userId);
+            if (isNaN(id) || !isFinite(id)) {
+                return res.status(400).json({message : "Invalid user ID"});
             }
+            const update = await userServices.updateUser(req.body, id);
+            if (update) {
+                return res.status(200).json(update);
+            }
+            return res.status(404).json({message : "User not found"});
         }
-        else {
-            res.status(400).json({message : "Invalid data received"});
-            return;
+        catch (err) {
+            console.error("Error in updateUser(): ", err);
+            return res.status(500).json({message : "Internal server error"});
+        }
+    },
+
+    delete : async (req, res) => {
+        try {
+            const id = parseInt(req.params.userId);
+            if (isNaN(id) || !isFinite(id)) {
+                return res.status(400).json({message : "Invalid user ID"});
+            }
+            const deletedUser = await userServices.deleteUser(id);
+            if (deletedUser) {
+                return res.status(204).end();
+            }
+            return res.status(404).json({message : "User not found"});
+        }
+        catch (err) {
+            console.error("Error in deleteUser(): ", err);
+            return res.status(500).json({message : "Internal server error"});
         }
     },
 };

@@ -22,7 +22,7 @@ async function startServer() {
     catch (err) {
         console.log("Error inititalizing the database: ",err);
         throw err;
-        exit();
+        process.exit(1);
     }
 }
 

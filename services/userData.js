@@ -12,11 +12,11 @@ module.exports = {
             users : [],
         }
 
-        const jsonSkeleton = JSON.stringify(users);
+        const jsonSkeleton = JSON.stringify(users, null, 2);
 
         // 1. Check if file exists
         try {
-            await fs.access(userFile, 'utf8');
+            await fs.access(userFile);
         }
         catch (err) {
             // Create file with schema only if file does not exist and not on any other error
@@ -48,7 +48,7 @@ module.exports = {
 
         // 5. Check if the schema of the file is correct or not
         if (typeof jsonData !== 'object' || jsonData === null || 
-            typeof jsonData.met !== 'object' || jsonData.meta === null || 
+            typeof jsonData.meta !== 'object' || jsonData.meta === null || 
             typeof jsonData.meta.lastId !== 'number' || !Array.isArray(jsonData.users)
         ) throw new Error("Database schema is invalid");
     },
@@ -62,7 +62,7 @@ module.exports = {
         }
         catch(error) {
             console.error('Error reading file: ', error);
-            throw err;
+            throw error;
         }
     },
 

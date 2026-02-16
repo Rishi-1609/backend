@@ -50,3 +50,55 @@ Refactored the backend into a modular layered structure and introduced file-base
    - Modular and layered architecture.
    - Aware of atomicity and concurrency limitations.
    - Prepared for future migration to database-backed storage.
+
+## Phase 3. Full CRUD Completion, Single-File Storage & Strict Initialization
+
+- Overview:  
+Completed full RESTful CRUD implementation for `/user`, migrated to a single structured storage file, and introduced strict fail-fast database initialization with schema validation.
+
+1. Completed RESTful endpoints:
+   - `GET /user` (Get all users)
+   - `GET /user/:userId` (Get user by ID)
+   - `POST /user` (Create user)
+   - `PUT /user/:userId` (Update user by ID)
+   - `DELETE /user/:userId` (Delete user by ID)
+
+2. Refactored storage into a single JSON file structure:
+   - Unified `meta` and `users` into one file.
+   - Structure:
+     ```json
+     {
+       "meta": { "lastId": number },
+       "users": [ ... ]
+     }
+     ```
+   - Removed separate metadata file.
+
+3. Enforced identity immutability:
+   - IDs are never reassigned.
+   - Deleted users do not affect existing IDs.
+   - `meta.lastId` increases monotonically.
+
+4. Implemented proper delete semantics:
+   - Used array `splice()` for safe removal.
+   - Returned `204 No Content` for successful deletion.
+   - Returned `404 Not Found` when user does not exist.
+
+5. Added strict startup initialization inside service layer:
+   - Creates database file only if missing.
+   - Initializes file if empty.
+   - Fails fast on corrupted JSON.
+   - Validates schema before allowing server to start.
+   - Prevents silent data resets.
+
+6. Strengthened error discipline:
+   - Clear distinction between `400`, `404`, `500`, and `204`.
+   - Controllers do not access filesystem directly.
+   - Services handle all persistence logic.
+
+- System Characteristics:
+   - Fully REST-compliant CRUD API.
+   - Deterministic startup behavior.
+   - Fail-fast database validation.
+   - Clean separation of HTTP, business, and storage logic.
+   - Architecturally ready for database migration (only service layer would change).

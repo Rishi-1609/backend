@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "lastId": 4
+  },
+  "users": [
+    {
+      "name": "Adharsh",
+      "age": 20,
+      "address": "Chennai",
+      "id": 2
+    },
+    {
+      "name": "Rishi",
+      "age": 21,
+      "address": "Raipur",
+      "id": 3
+    },
+    {
+      "name": "Aryan",
+      "age": 21,
+      "address": "Raipur",
+      "id": 4
+    }
+  ]
+}

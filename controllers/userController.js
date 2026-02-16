@@ -30,9 +30,9 @@ module.exports = {
     },
 
     post: async (req, res) => {
-        const success = await userServices.addUser(req.body);
-        if (success) {
-            return res.status(201).json("User created");
+        const createdUser = await userServices.addUser(req.body);
+        if (createdUser) {
+            return res.status(201).json({ message: "User created", user: createdUser });
         }
         res.status(400).json("Invalid details submitted");
     },

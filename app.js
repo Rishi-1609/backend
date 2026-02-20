@@ -3,7 +3,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 const dataRoute = require('./routes/dataRoute');
 const userRoute = require('./routes/userRoute');

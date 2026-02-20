@@ -98,7 +98,7 @@ module.exports = {
         }
         catch (err){
             console.error("Error writing file: ", err);
-            throw err;
+            throw err; 
         }
     },
 

@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 3000;
 const cors = require("cors");
 app.use(
     cors({
-        origin : "https://html-js-frontend.vercel.app/",
+        origin : "https://html-js-frontend.vercel.app",
     })
 )
 
